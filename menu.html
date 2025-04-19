@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jijau Restaurant</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <style>
+    :root {
+      --primary-color: #d35400;
+      --secondary-color: #e67e22;
+      --light-bg: #f9f5f0;
+      --dark-text: #2c3e50;
+    }
+    
+    body {
+      background-color: var(--light-bg);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--dark-text);
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      color: var(--primary-color) !important;
+    }
+    
+    .menu-category-btn {
+      transition: all 0.3s ease;
+    }
+    
+    .menu-category-btn.active {
+      background-color: var(--primary-color) !important;
+      color: white !important;
+    }
+    
+    .menu-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      height: 100%;
+      border: none;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .menu-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .menu-card-img {
+      height: 200px;
+      object-fit: cover;
+    }
+    
+    .price-badge {
+      background: var(--primary-color);
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+    
+    .back-btn {
+      transition: all 0.3s ease;
+    }
+    
+    .back-btn:hover {
+      transform: translateX(-3px);
+    }
+    
+    .section-title {
+      position: relative;
+      margin-bottom: 2.5rem;
+      color: var(--primary-color);
+    }
+    
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: var(--secondary-color);
+    }
+    
+    .about-img {
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .contact-info i {
+      color: var(--primary-color);
+      margin-right: 10px;
+    }
+    
+    .language-btn {
+      min-width: 180px;
+      margin: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .language-btn:hover {
+      transform: scale(1.05);
+    }
+    
+    .option-btn {
+      min-width: 220px;
+      margin: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .option-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    }
+    
+    .veg-icon {
+      color: green;
+      margin-right: 5px;
+    }
+    
+    .non-veg-icon {
+      color: #d35400;
+      margin-right: 5px;
+    }
+    
+    .menu-item-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .menu-item-desc {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .menu-card-img {
+        height: 150px;
+      }
+      .menu-card {
+    background-color: rgb(255, 255, 255);
+    }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container">
+    <a class="navbar-brand" href="#" onclick="showView('language')">
+      <i class="fas fa-utensils me-2"></i>Jijau Restaurant
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showView('menu')"><i class="fas fa-utensils me-1"></i> <span class="nav-link-text">Menu</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="showView('about')"><i class="fas fa-info-circle me-1"></i> <span class="nav-link-text">About</span></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container py-5" id="app-container"></div>
+
+<!-- Footer -->
+<!-- <footer class="bg-dark text-white py-4">
+  <div class="container text-center">
+    <p class="mb-0">&copy; 2023 Jijau Restaurant. All rights reserved.</p>
+  </div>
+</footer> -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Configuration
+let currentLang = 'en';
+let currentView = 'language';
+let currentMeal = '';
+
+// Translations
+const translations = {
+  en: {
+    selectLanguage: "Select Language",
+    selectOption: "Select Option",
+    menu: "Menu",
+    discounts: "Discounts",
+    about: "About Us",
+    back: "Back",
+    selectMeal: "Select Meal Type",
+    breakfast: "Breakfast",
+    lunch: "Lunch",
+    dinner: "Dinner",
+    snacks: "Snacks",
+    beverages: "Beverages",
+    aboutText: "Welcome to Jijau Restaurant, serving authentic Maharashtrian cuisine since 1985. Our recipes have been passed down through generations, preserving the rich culinary heritage of Maharashtra.",
+    address: "123 Food Street, Pune, Maharashtra",
+    contact: "Contact Us",
+    openingHours: "Opening Hours",
+    hours: "Mon-Sun: 8:00 AM - 11:00 PM",
+    allItems: "All Items",
+    veg: "Vegetarian",
+    nonVeg: "Non-Vegetarian"
+  },
+  hi: {
+    selectLanguage: "भाषा चुनें",
+    selectOption: "विकल्प चुनें",
+    menu: "मेनू",
+    discounts: "छूट",
+    about: "हमारे बारे में",
+    back: "वापस",
+    selectMeal: "भोजन प्रकार चुनें",
+    breakfast: "नाश्ता",
+    lunch: "दोपहर का भोजन",
+    dinner: "रात का खाना",
+    snacks: "नाश्ता",
+    beverages: "पेय पदार्थ",
+    aboutText: "1985 से महाराष्ट्रीयन व्यंजन परोस रहे जिजाऊ रेस्तरां में आपका स्वागत है। हमारे व्यंजन पीढ़ियों से चले आ रहे हैं, जो महाराष्ट्र की समृद्ध पाक विरासत को संरक्षित करते हैं।",
+    address: "123 फूड स्ट्रीट, पुणे, महाराष्ट्र",
+    contact: "संपर्क करें",
+    openingHours: "खुलने का समय",
+    hours: "सोम-रवि: सुबह 8:00 बजे से रात 11:00 बजे तक",
+    allItems: "सभी वस्तुएं",
+    veg: "शाकाहारी",
+    nonVeg: "मांसाहारी"
+  },
+  mr: {
+    selectLanguage: "भाषा निवडा",
+    selectOption: "पर्याय निवडा",
+    menu: "मेनू",
+    discounts: "सवलत",
+    about: "आमच्याबद्दल",
+    back: "मागे",
+    selectMeal: "जेवण प्रकार निवडा",
+    breakfast: "नाश्ता",
+    lunch: "दुपारचे जेवण",
+    dinner: "रात्रीचे जेवण",
+    snacks: "नाश्ता",
+    beverages: "पेये",
+    aboutText: "१९८५ पासून खऱ्या महाराष्ट्रीयन पाककृती सेवा देणाऱ्या जिजाऊ रेस्टॉरंट मध्ये आपले स्वागत आहे. आमच्या पाककृती पिढ्यान्पिढ्या चालत आल्या आहेत, ज्या महाराष्ट्राच्या समृद्ध पाक परंपरा जपतात.",
+    address: "१२३ अन्न मार्ग, पुणे, महाराष्ट्र",
+    contact: "आमच्याशी संपर्क साधा",
+    openingHours: "उघडण्याचे वेळ",
+    hours: "सोम-रवि: सकाळी ८:०० ते रात्री ११:००",
+    allItems: "सर्व आयटम",
+    veg: "शाकाहारी",
+    nonVeg: "मांसाहारी"
+  }
+};
+
+// Menu Data Structure - Organized for easy management
+const menuCategories = ['breakfast', 'lunch', 'dinner', 'snacks', 'beverages'];
+
+const menuData = {
+  breakfast: [
+    {
+      id: 1,
+      name: { en: "Misal Pav", hi: "मिसळ पाव", mr: "मिसळ पाव" },
+      description: {
+        en: "Spicy sprouted curry served with bread rolls",
+        hi: "मसालेदार अंकुरित करी ब्रेड रोल के साथ",
+        mr: "मसालेदार अंकुरित करी ब्रेड रोलसह"
+      },
+      price: 80,
+      image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=1470&q=80",
+      type: "veg",
+      popular: true
+    },
+    {
+      id: 2,
+      name: { en: "Poha", hi: "पोहा", mr: "पोहा" },
+      description: {
+        en: "Flattened rice cooked with onions, potatoes and spices",
+        hi: "प्याज, आलू और मसालों के साथ पकाया हुआ चपटा चावल",
+        mr: "कांदा, बटाटा आणि मसाल्यांसह शिजवलेले चपटे तांदूळ"
+      },
+      price: 60,
+      image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=1470&q=80",
+      type: "veg",
+      popular: true
+    }
+  ],
+  lunch: [
+    {
+      id: 3,
+      name: { en: "Thalipeeth", hi: "थालीपीठ", mr: "थालीपीठ" },
+      description: {
+        en: "Multi-grain pancake with homemade butter",
+        hi: "घर के बने मक्खन के साथ मल्टी-ग्रेन पैनकेक",
+        mr: "घरातील लोणी सह बहु-धान्य पॅनकेक"
+      },
+      price: 100,
+      image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=1371&q=80",
+      type: "veg",
+      popular: false
+    },
+    {
+      id: 4,
+      name: { en: "Puran Poli", hi: "पुरण पोली", mr: "पुरण पोळी" },
+      description: {
+        en: "Sweet flatbread stuffed with lentil and jaggery filling",
+        hi: "दाल और गुड़ की भराई वाली मीठी रोटी",
+        mr: "डाळ आणि गुळाच्या भरतीची गोड पोळी"
+      },
+      price: 90,
+      image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=1371&q=80",
+      type: "veg",
+      popular: true
+    }
+  ],
+  dinner: [
+    {
+      id: 5,
+      name: { en: "Bhakri with Thecha", hi: "भाकरी ठेचा के साथ", mr: "भाकरी ठेचा सह" },
+      description: {
+        en: "Millet bread with spicy chili-garlic chutney",
+        hi: "मसालेदार मिर्च-लहसुन की चटनी के साथ बाजरे की रोटी",
+        mr: "मसालेदार मिरची-लसूण चटणी सह बाजरीची भाकरी"
+      },
+      price: 110,
+      image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=1470&q=80",
+      type: "veg",
+      popular: false
+    }
+  ],
+  snacks: [
+    {
+      id: 6,
+      name: { en: "Vada Pav", hi: "वड़ा पाव", mr: "वडा पाव" },
+      description: {
+        en: "Spicy potato fritter in a bread bun",
+        hi: "ब्रेड बन में मसालेदार आलू का वड़ा",
+        mr: "ब्रेड बनमध्ये मसालेदार बटाटा वडा"
+      },
+      price: 30,
+      image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=1470&q=80",
+      type: "veg",
+      popular: true
+    }
+  ],
+  beverages: [
+    {
+      id: 7,
+      name: { en: "Kokum Sharbat", hi: "कोकम शरबत", mr: "कोकम शर्बत" },
+      description: {
+        en: "Refreshing drink made from kokum fruit",
+        hi: "कोकम फल से बनाया गया ताज़ा पेय",
+        mr: "कोकम फळापासून बनवलेले ताजे पेय"
+      },
+      price: 40,
+      image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=1371&q=80",
+      type: "veg",
+      popular: true
+    }
+  ]
+};
+
+// Helper function to create menu items
+function createMenuItem(id, category, name, description, price, image, type = 'veg', popular = false) {
+  return {
+    id,
+    name: typeof name === 'string' ? { en: name, hi: name, mr: name } : name,
+    description: typeof description === 'string' ? { en: description, hi: description, mr: description } : description,
+    price,
+    image,
+    type,
+    popular
+  };
+}
+
+// Example of adding a new item easily:
+// menuData.snacks.push(createMenuItem(
+//   8,
+//   'snacks',
+//   { en: "Sabudana Vada", hi: "साबुदाना वड़ा", mr: "साबुदाणा वडा" },
+//   { en: "Crispy sago fritters", hi: "कुरकुरे साबुदाने के वड़े", mr: "कुरकुरे साबुदाणा वडा" },
+//   70,
+//   "https://example.com/image.jpg",
+//   "veg",
+//   true
+// ));
+
+// Render Function
+function render() {
+  const t = translations[currentLang];
+  let html = '';
+
+  // Back button for all views except language selection
+  if (currentView !== 'language') {
+    html += `
+      <button class="btn btn-outline-secondary back-btn mb-4" onclick="goBack()">
+        <i class="fas fa-arrow-left me-2"></i>${t.back}
+      </button>`;
+  }
+
+  switch (currentView) {
+    case 'language':
+      html += renderLanguageSelection();
+      break;
+
+    case 'options':
+      html += renderOptions();
+      break;
+
+    case 'menu':
+      html += renderMenu();
+      break;
+
+    case 'about':
+      html += renderAbout();
+      break;
+
+    case 'discounts':
+      html += renderDiscounts();
+      break;
+  }
+
+  document.getElementById('app-container').innerHTML = html;
+  updateNavTexts();
+}
+
+function renderLanguageSelection() {
+  const t = translations[currentLang];
+  return `
+    <div class="text-center py-4">
+      <h2 class="section-title">${t.selectLanguage}</h2>
+      <div class="d-flex flex-wrap justify-content-center mt-5">
+        <button class="btn btn-primary btn-lg language-btn" onclick="setLanguage('en')">
+          <i class="fas fa-language me-2"></i>English
+        </button>
+        <button class="btn btn-success btn-lg language-btn" onclick="setLanguage('hi')">
+          <i class="fas fa-language me-2"></i>हिंदी
+        </button>
+        <button class="btn btn-warning btn-lg language-btn" onclick="setLanguage('mr')">
+          <i class="fas fa-language me-2"></i>मराठी
+        </button>
+      </div>
+    </div>`;
+}
+
+function renderOptions() {
+  const t = translations[currentLang];
+  return `
+    <div class="text-center py-4">
+      <h2 class="section-title">${t.selectOption}</h2>
+      <div class="d-flex flex-wrap justify-content-center mt-5">
+        <button class="btn btn-outline-primary btn-lg option-btn" onclick="showView('menu')">
+          <i class="fas fa-utensils me-2"></i>${t.menu}
+        </button>
+        <button class="btn btn-outline-success btn-lg option-btn" onclick="showView('discounts')">
+          <i class="fas fa-tag me-2"></i>${t.discounts}
+        </button>
+        <button class="btn btn-outline-info btn-lg option-btn" onclick="showView('about')">
+          <i class="fas fa-info-circle me-2"></i>${t.about}
+        </button>
+      </div>
+    </div>`;
+}
+
+function renderMenu() {
+  const t = translations[currentLang];
+  return `
+    <div>
+      <h2 class="text-center section-title">${t.menu}</h2>
+      
+      <div class="text-center mb-5">
+        <div class="btn-group flex-wrap" role="group">
+          <button type="button" class="btn menu-category-btn ${!currentMeal ? 'active' : 'btn-outline-dark'}" 
+            onclick="showMeal('')">${t.allItems}</button>
+          ${menuCategories.map(category => `
+            <button type="button" class="btn menu-category-btn ${currentMeal === category ? 'active' : 'btn-outline-dark'}" 
+              onclick="showMeal('${category}')">
+              <i class="fas ${getCategoryIcon(category)} me-2"></i>${t[category]}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+      
+      <div class="row g-4" id="menu-items-container">
+        ${renderMenuItems()}
+      </div>
+    </div>`;
+}
+
+function renderMenuItems() {
+  const t = translations[currentLang];
+  
+  // Get items to display
+  let itemsToDisplay = [];
+  if (currentMeal && menuData[currentMeal]) {
+    itemsToDisplay = menuData[currentMeal];
+  } else if (!currentMeal) {
+    // Show all items if no category selected
+    itemsToDisplay = [];
+    menuCategories.forEach(category => {
+      if (menuData[category]) {
+        itemsToDisplay = itemsToDisplay.concat(menuData[category]);
+      }
+    });
+  }
+  
+  if (itemsToDisplay.length === 0) {
+    return `
+      <div class="col-12 text-center py-5">
+        <h4 class="text-muted">${t.selectMeal}</h4>
+        <p>${t.selectMeal}</p>
+      </div>`;
+  }
+  
+  return itemsToDisplay.map(item => `
+    <div class="col-md-6 col-lg-4">
+      <div class="menu-card card h-100">
+        ${item.popular ? `<span class="position-absolute top-0 start-0 bg-danger text-white px-2 py-1 rounded-end">Popular</span>` : ''}
+        <img src="${item.image}" class="card-img-top menu-card-img" alt="${item.name[currentLang]}">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <h5 class="menu-item-title card-title mb-0">
+              ${item.type === 'veg' ? '<i class="fas fa-leaf veg-icon"></i>' : '<i class="fas fa-drumstick-bite non-veg-icon"></i>'}
+              ${item.name[currentLang]}
+            </h5>
+            <span class="price-badge">₹${item.price}</span>
+          </div>
+          <p class="menu-item-desc card-text">${item.description[currentLang]}</p>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderAbout() {
+  const t = translations[currentLang];
+  return `
+    <div>
+      <h2 class="text-center section-title">${t.about}</h2>
+      
+      <div class="row align-items-center">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+          <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1470&q=80" 
+            class="img-fluid about-img" alt="Restaurant">
+        </div>
+        <div class="col-lg-6">
+          <div class="p-3">
+            <p class="lead">${t.aboutText}</p>
+            
+            <h4 class="mt-5"><i class="fas fa-clock"></i> ${t.openingHours}</h4>
+            <p class="ps-4">${t.hours}</p>
+            
+            <h4 class="mt-4"><i class="fas fa-map-marker-alt"></i> ${t.contact}</h4>
+            <div class="contact-info ps-4">
+              <p><i class="fas fa-map-marker-alt"></i> ${t.address}</p>
+              <p><i class="fas fa-phone"></i> +91 9876543210</p>
+              <p><i class="fas fa-envelope"></i> info@jijaurestaurant.com</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderDiscounts() {
+  const t = translations[currentLang];
+  return `
+    <div class="text-center py-5">
+      <h2 class="section-title">${t.discounts}</h2>
+      <div class="alert alert-info mt-4">
+        <i class="fas fa-info-circle me-2"></i>
+        ${t.noDiscounts || "Check back later for special offers and discounts!"}
+      </div>
+    </div>`;
+}
+
+// Helper functions
+function getCategoryIcon(category) {
+  const icons = {
+    breakfast: 'fa-coffee',
+    lunch: 'fa-utensils',
+    dinner: 'fa-moon',
+    snacks: 'fa-cookie-bite',
+    beverages: 'fa-glass-whiskey'
+  };
+  return icons[category] || 'fa-utensils';
+}
+
+function updateNavTexts() {
+  const t = translations[currentLang];
+  document.querySelectorAll('.nav-link-text').forEach(el => {
+    const link = el.closest('.nav-link');
+    if (link) {
+      if (link.getAttribute('onclick')?.includes('menu')) {
+        el.textContent = t.menu;
+      } else if (link.getAttribute('onclick')?.includes('about')) {
+        el.textContent = t.about;
+      }
+    }
+  });
+}
+
+// Navigation functions
+function setLanguage(lang) {
+  currentLang = lang;
+  currentView = 'options';
+  render();
+}
+
+function showView(view) {
+  currentView = view;
+  currentMeal = '';
+  render();
+}
+
+function goBack() {
+  if (currentView === 'options') currentView = 'language';
+  else if (currentView === 'menu') currentView = 'options';
+  else currentView = 'menu';
+  currentMeal = '';
+  render();
+}
+
+function showMeal(meal) {
+  currentMeal = meal;
+  render();
+}
+
+// Initialize
+window.onload = render;
+</script>
+
+</body>
+</html>

@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Jijau Restaurant - Authentic Maharashtrian Cuisine</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #d35400;
+      --secondary-color: #e67e22;
+      --accent-color: #f39c12;
+      --dark-color: #7f8c8d;
+      --light-color: #ecf0f1;
+    }
+    
+    body {
+      background-color: #f9f5f0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      color: var(--primary-color) !important;
+      font-size: 1.5rem;
+    }
+    
+    .nav-link {
+      font-weight: 500;
+    }
+    
+    .card {
+      border-radius: 15px;
+      border: none;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      height: 100%;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .card-img-top {
+      height: 200px;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .card:hover .card-img-top {
+      transform: scale(1.05);
+    }
+    
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+    
+    .card-text {
+      color: var(--dark-color);
+      font-size: 0.9rem;
+    }
+    
+    .price-badge {
+      background-color: var(--primary-color);
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+    }
+    
+    .section-title {
+      position: relative;
+      margin-bottom: 2rem;
+      color: var(--primary-color);
+    }
+    
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background-color: var(--accent-color);
+    }
+    
+    .lang-btn {
+      min-width: 100px;
+      font-weight: 500;
+    }
+    
+    .meal-btn {
+      min-width: 120px;
+      font-weight: 500;
+    }
+    
+    .restaurant-header {
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 5rem 0;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+    
+    .restaurant-name {
+      font-size: 3rem;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    .restaurant-tagline {
+      font-size: 1.5rem;
+      font-weight: 300;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+    
+    @media (max-width: 768px) {
+      .restaurant-name {
+        font-size: 2rem;
+      }
+      
+      .restaurant-tagline {
+        font-size: 1rem;
+      }
+      
+      .card-img-top {
+        height: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+  <div class="container">
+    <a class="navbar-brand" href="#">
+      <i class="fas fa-utensils me-2"></i>Jijau Restaurant
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#languageModal">
+            <i class="fas fa-language me-1"></i>Change Language
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#mealModal">
+            <i class="fas fa-utensils me-1"></i>Change Meal
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Restaurant Header -->
+<div class="restaurant-header">
+  <div class="container">
+    <h1 class="restaurant-name">Jijau Restaurant</h1>
+    <p class="restaurant-tagline">Authentic Maharashtrian Flavors Since 1985</p>
+  </div>
+</div>
+
+<!-- Language Modal -->
+<div class="modal fade" id="languageModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center">
+      <div class="modal-header border-0">
+        <h5 class="modal-title w-100">Select Language</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body py-4">
+        <button class="btn btn-primary m-2 lang-btn" data-lang="en">
+          <i class="fas fa-language me-2"></i>English
+        </button>
+        <button class="btn btn-success m-2 lang-btn" data-lang="hi">
+          <i class="fas fa-language me-2"></i>हिंदी
+        </button>
+        <button class="btn btn-warning m-2 lang-btn" data-lang="mr">
+          <i class="fas fa-language me-2"></i>मराठी
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Meal Modal -->
+<div class="modal fade" id="mealModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center">
+      <div class="modal-header border-0">
+        <h5 class="modal-title meal-title w-100">Select Meal</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body py-4">
+        <button class="btn btn-outline-dark m-2 meal-btn" data-meal="breakfast">
+          <i class="fas fa-coffee me-2"></i><span class="meal-text">Breakfast</span>
+        </button>
+        <button class="btn btn-outline-dark m-2 meal-btn" data-meal="lunch">
+          <i class="fas fa-utensils me-2"></i><span class="meal-text">Lunch</span>
+        </button>
+        <button class="btn btn-outline-dark m-2 meal-btn" data-meal="dinner">
+          <i class="fas fa-moon me-2"></i><span class="meal-text">Dinner</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Menu Display Section -->
+<div class="container mb-5" id="menuSection">
+  <h2 class="section-title" id="currentMealTitle">Our Menu</h2>
+  <div class="row g-4" id="menuContainer">
+    <!-- Menu items will be loaded here -->
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <h5><i class="fas fa-utensils me-2"></i>Jijau Restaurant</h5>
+        <p>Authentic Maharashtrian cuisine served with love since 1985.</p>
+      </div>
+      <div class="col-md-4 mb-3">
+        <h5><i class="fas fa-clock me-2"></i>Opening Hours</h5>
+        <p>Monday - Sunday<br>7:00 AM - 11:00 PM</p>
+      </div>
+      <div class="col-md-4 mb-3">
+        <h5><i class="fas fa-map-marker-alt me-2"></i>Location</h5>
+        <p>123 Food Street, Pune<br>Maharashtra, India</p>
+      </div>
+    </div>
+    <hr>
+    <div class="text-center">
+      <p class="mb-0">&copy; 2023 Jijau Restaurant. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- jQuery + Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+let selectedLang = "en";
+let selectedMeal = "breakfast";
+
+const labels = {
+  en: { 
+    mealTitle: "Select Meal", 
+    breakfast: "Breakfast", 
+    lunch: "Lunch", 
+    dinner: "Dinner",
+    ourMenu: "Our Menu"
+  },
+  hi: { 
+    mealTitle: "भोजन का चयन करें", 
+    breakfast: "नाश्ता", 
+    lunch: "दोपहर का भोजन", 
+    dinner: "रात का खाना",
+    ourMenu: "हमारा मेनू"
+  },
+  mr: { 
+    mealTitle: "भोजन निवडा", 
+    breakfast: "नाश्ता", 
+    lunch: "दुपारचे जेवण", 
+    dinner: "रात्रीचे जेवण",
+    ourMenu: "आमचे मेनू"
+  }
+};
+
+const menuData = {
+  "en": {
+    "breakfast": [
+      { 
+        "name": "Misal Pav", 
+        "description": "Spicy sprouted curry served with bread rolls", 
+        "price": 80,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      },
+      { 
+        "name": "Poha", 
+        "description": "Flattened rice with onions, peanuts and spices", 
+        "price": 60,
+        "image": "https://images.unsplash.com/photo-1601050690123-4f70b427eb1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80"
+      },
+      { 
+        "name": "Upma", 
+        "description": "Semolina cooked with vegetables and spices", 
+        "price": 50,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      }
+    ],
+    "lunch": [
+      { 
+        "name": "Thalipeeth", 
+        "description": "Multi-grain pancake with homemade butter", 
+        "price": 100,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      },
+      { 
+        "name": "Puran Poli", 
+        "description": "Sweet flatbread stuffed with lentil and jaggery", 
+        "price": 90,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      },
+      { 
+        "name": "Bharli Vangi", 
+        "description": "Stuffed baby eggplants in spicy gravy", 
+        "price": 150,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      }
+    ],
+    "dinner": [
+      { 
+        "name": "Zunka Bhakar", 
+        "description": "Traditional rural meal of spiced chickpea flour with millet bread", 
+        "price": 120,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      },
+      { 
+        "name": "Pitla Bhakri", 
+        "description": "Chickpea flour curry with millet flatbread", 
+        "price": 110,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      },
+      { 
+        "name": "Kolhapuri Chicken", 
+        "description": "Spicy chicken curry from Kolhapur region", 
+        "price": 220,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      }
+    ]
+  },
+  "hi": {
+    "breakfast": [
+      { 
+        "name": "मिसळ पाव", 
+        "description": "मसालेदार अंकुरित करी ब्रेड रोल के साथ", 
+        "price": 80,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      },
+      { 
+        "name": "पोहा", 
+        "description": "प्याज, मूंगफली और मसालों के साथ चपटा चावल", 
+        "price": 60,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      },
+      { 
+        "name": "उपमा", 
+        "description": "सब्जियों और मसालों के साथ पकाया हुआ सूजी", 
+        "price": 50,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      }
+    ],
+    "lunch": [
+      { 
+        "name": "थालीपीठ", 
+        "description": "घर के बने मक्खन के साथ मल्टी-ग्रेन पैनकेक", 
+        "price": 100,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      },
+      { 
+        "name": "पुरण पोळी", 
+        "description": "दाल और गुड़ से भरी मीठी फ्लैटब्रेड", 
+        "price": 90,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      },
+      { 
+        "name": "भरली वांगी", 
+        "description": "मसालेदार ग्रेवी में भरे हुए बैंगन", 
+        "price": 150,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      }
+    ],
+    "dinner": [
+      { 
+        "name": "झुणका भाकर", 
+        "description": "मसालेदार चने के आटे और बाजरे की रोटी का पारंपरिक ग्रामीण भोजन", 
+        "price": 120,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      },
+      { 
+        "name": "पिटला भाकरी", 
+        "description": "चने के आटे की करी और बाजरे की रोटी", 
+        "price": 110,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      },
+      { 
+        "name": "कोल्हापुरी चिकन", 
+        "description": "कोल्हापुर क्षेत्र की मसालेदार चिकन करी", 
+        "price": 220,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      }
+    ]
+  },
+  "mr": {
+    "breakfast": [
+      { 
+        "name": "मिसळ पाव", 
+        "description": "मसालेदार अंकुरित करी ब्रेड रोलसह", 
+        "price": 80,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      },
+      { 
+        "name": "पोहा", 
+        "description": "कांदा, शेंगदाणे आणि मसाल्यांसह चपटा तांदूळ", 
+        "price": 60,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      },
+      { 
+        "name": "उपमा", 
+        "description": "भाज्या आणि मसाल्यांसह शिजवलेला सूजी", 
+        "price": 50,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      }
+    ],
+    "lunch": [
+      { 
+        "name": "थालीपीठ", 
+        "description": "घरातील लोणी सह बहु-धान्य पॅनकेक", 
+        "price": 100,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      },
+      { 
+        "name": "पुरण पोळी", 
+        "description": "डाळ आणि गुळाने भरलेली गोड फ्लॅटब्रेड", 
+        "price": 90,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      },
+      { 
+        "name": "भरली वांगी", 
+        "description": "मसालेदार ग्रेव्हीमध्ये भरलेली वांगी", 
+        "price": 150,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      }
+    ],
+    "dinner": [
+      { 
+        "name": "झुणका भाकरी", 
+        "description": "मसालेदार हरभरा पीठ आणि बाजरीच्या भाकरीचे पारंपारिक ग्रामीण जेवण", 
+        "price": 120,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      },
+      { 
+        "name": "पिटला भाकरी", 
+        "description": "हरभरा पिठाची करी आणि बाजरीची भाकरी", 
+        "price": 110,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      },
+      { 
+        "name": "कोल्हापुरी चिकन", 
+        "description": "कोल्हापूर प्रदेशातील मसालेदार चिकन करी", 
+        "price": 220,
+        "image": "https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+      }
+    ]
+  }
+};
+
+$(document).ready(function () {
+  // Initialize with English and Breakfast
+  updateLabels();
+  loadMenu();
+  
+  $('.lang-btn').click(function () {
+    selectedLang = $(this).data('lang');
+    $('#languageModal').modal('hide');
+    updateLabels();
+    loadMenu();
+  });
+
+  $('.meal-btn').click(function () {
+    selectedMeal = $(this).data('meal');
+    $('#mealModal').modal('hide');
+    loadMenu();
+  });
+});
+
+function updateLabels() {
+  const langLabels = labels[selectedLang];
+  $('.meal-title').text(langLabels.mealTitle);
+  $('.meal-btn').each(function () {
+    const mealKey = $(this).data('meal');
+    $(this).find('.meal-text').text(langLabels[mealKey]);
+  });
+  $('#currentMealTitle').text(langLabels.ourMenu);
+}
+
+function loadMenu() {
+  const items = menuData[selectedLang][selectedMeal];
+  let content = "";
+  
+  items.forEach(item => {
+    content += `
+      <div class="col-md-6 col-lg-4">
+        <div class="card shadow-sm">
+          <img src="${item.image}" class="card-img-top" alt="${item.name}">
+          <div class="card-body">
+            <h5 class="card-title">${item.name}</h5>
+            <p class="card-text">${item.description}</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="badge price-badge">₹${item.price}</span>
+              <button class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-plus me-1"></i>Add
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  });
+  
+  $('#menuContainer').html(content);
+  $('#currentMealTitle').text(labels[selectedLang].ourMenu + " - " + labels[selectedLang][selectedMeal]);
+}
+</script>
+
+</body>
+</html>
