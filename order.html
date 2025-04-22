@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Food Express</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #FF6B6B;
+      --secondary-color: #4ECDC4;
+      --dark-color: #292F36;
+      --light-color: #F7FFF7;
+      --accent-color: #FFE66D;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background-color: #f5f5f5;
+      color: var(--dark-color);
+      -webkit-tap-highlight-color: transparent;
+      padding-bottom: 80px;
+    }
+    
+    .app-header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 15px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    
+    .logo-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .category-tabs {
+      display: flex;
+      justify-content: space-around;
+      background: white;
+      padding: 10px 0;
+      position: sticky;
+      top: 68px;
+      z-index: 999;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .category-tab {
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .category-tab.active {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .food-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      border: none;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      gap: 15px;
+    }
+    
+    .food-img-container {
+      width: 80px;
+      height: 80px;
+      min-width: 80px;
+    }
+    
+    .food-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid var(--primary-color);
+    }
+    
+    .food-info {
+      flex: 1;
+    }
+    
+    .food-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+      font-size: 1rem;
+    }
+    
+    .food-desc {
+      color: #666;
+      font-size: 0.8rem;
+      margin-bottom: 8px;
+    }
+    
+    .food-price {
+      font-weight: bold;
+      color: var(--primary-color);
+      font-size: 1rem;
+    }
+    
+    .add-btn {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 6px 15px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.9rem;
+    }
+    
+    .mobile-cart-panel {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: calc(100% - 40px);
+      max-width: 400px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      z-index: 999;
+      padding: 20px;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+    
+    .mobile-cart-panel.show {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .cart-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      gap: 10px;
+    }
+    
+    .cart-item-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary-color);
+    }
+    
+    .cart-item-details {
+      flex: 1;
+    }
+    
+    .cart-item-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .cart-item-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #f0f0f0;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    
+    .floating-cart-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 1000;
+      font-size: 1.5rem;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .cart-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: var(--accent-color);
+      color: var(--dark-color);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+    
+    .checkout-form {
+      margin-top: 20px;
+    }
+    
+    .form-control {
+      border-radius: 10px;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .food-img-container {
+        width: 70px;
+        height: 70px;
+        min-width: 70px;
+      }
+      
+      .app-header h2 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header shadow-sm">
+    <div class="container">
+      <div class="logo-title">
+        <i class="fas fa-utensils"></i>
+        <h2 class="mb-0">Food Express</h2>
+      </div>
+    </div>
+  </header>
+
+  <div class="category-tabs">
+    <div class="category-tab active" data-category="breakfast">Breakfast</div>
+    <div class="category-tab" data-category="lunch">Lunch</div>
+    <div class="category-tab" data-category="dinner">Dinner</div>
+  </div>
+
+  <div class="container py-3">
+    <div class="row" id="menu"></div>
+  </div>
+
+  <!-- Mobile Cart Panel -->
+  <div class="mobile-cart-panel" id="mobile-cart-panel">
+    <h4><i class="fas fa-shopping-cart"></i> Your Order</h4>
+    <ul class="list-unstyled" id="mobile-cart-list">
+      <li class="empty-cart">Your cart is empty</li>
+    </ul>
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <strong>Total:</strong>
+      <span class="total-amount">₹<span id="mobile-total-amount">0</span></span>
+    </div>
+    
+    <div class="checkout-form">
+      <input type="text" class="form-control" id="customer-name" placeholder="Your Name" required>
+      <input type="text" class="form-control" id="customer-address" placeholder="Delivery Address" required>
+      <input type="tel" class="form-control" id="customer-phone" placeholder="Phone Number" required>
+      <button class="btn btn-success w-100 mt-2" id="checkout-btn">
+        <i class="fab fa-whatsapp"></i> Place Order
+      </button>
+    </div>
+  </div>
+
+  <!-- Floating Cart Button -->
+  <button class="floating-cart-btn" id="cart-toggle">
+    <i class="fas fa-shopping-cart"></i>
+    <span class="cart-badge" id="cart-badge">0</span>
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Food data categorized by meal time
+    const foodItems = {
+      breakfast: [
+        { 
+          name: 'Masala Dosa', 
+          price: 80,
+          description: 'Crispy rice crepe with potato filling',
+          image: 'https://images.unsplash.com/photo-1633613286848-e6f43bbafb8d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80'
+        },
+        { 
+          name: 'Poha', 
+          price: 50,
+          description: 'Flattened rice with peanuts and spices',
+          image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80'
+        },
+        { 
+          name: 'Idli Sambar', 
+          price: 60,
+          description: 'Steamed rice cakes with lentil soup',
+          image: 'https://images.unsplash.com/photo-1633512705624-0a0a0a8d1b1e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80'
+        }
+      ],
+      lunch: [
+        { 
+          name: 'Thali Meal', 
+          price: 120,
+          description: 'Complete meal with rice, roti, dal and vegetables',
+          image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80'
+        },
+        { 
+          name: 'Biryani', 
+          price: 150,
+          description: 'Fragrant rice with vegetables and spices',
+          image: 'https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80'
+        },
+        { 
+          name: 'Curry Rice', 
+          price: 100,
+          description: 'Steamed rice with vegetable curry',
+          image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80'
+        }
+      ],
+      dinner: [
+        { 
+          name: 'Paneer Butter Masala', 
+          price: 180,
+          description: 'Cottage cheese in rich tomato gravy',
+          image: 'https://images.unsplash.com/photo-1633512705624-0a0a0a8d1b1e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80'
+        },
+        { 
+          name: 'Dal Fry', 
+          price: 120,
+          description: 'Tempered lentils with spices',
+          image: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80'
+        },
+        { 
+          name: 'Roti Sabzi', 
+          price: 90,
+          description: 'Indian bread with mixed vegetables',
+          image: 'https://images.unsplash.com/photo-1633512705624-0a0a0a8d1b1e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80'
+        }
+      ]
+    };
+
+    // DOM Elements
+    const menuContainer = document.getElementById('menu');
+    const mobileCartList = document.getElementById('mobile-cart-list');
+    const mobileTotalAmount = document.getElementById('mobile-total-amount');
+    const cartBadge = document.getElementById('cart-badge');
+    const cartToggle = document.getElementById('cart-toggle');
+    const mobileCartPanel = document.getElementById('mobile-cart-panel');
+    const categoryTabs = document.querySelectorAll('.category-tab');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    const customerName = document.getElementById('customer-name');
+    const customerAddress = document.getElementById('customer-address');
+    const customerPhone = document.getElementById('customer-phone');
+
+    // Initialize cart
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let currentCategory = 'breakfast';
+
+    // Load menu items for a category
+    function loadMenu(category) {
+      menuContainer.innerHTML = '';
+      foodItems[category].forEach((item, index) => {
+        const col = document.createElement('div');
+        col.className = 'col-12';
+        col.innerHTML = `
+          <div class="food-card">
+            <div class="food-img-container">
+              <img src="${item.image}" class="food-img" alt="${item.name}">
+            </div>
+            <div class="food-info">
+              <div class="food-title">${item.name}</div>
+              <div class="food-desc">${item.description}</div>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="food-price">₹${item.price}</div>
+                <button class="add-btn" onclick="addToCart('${category}', ${index}, event)">
+                  <i class="fas fa-plus"></i> Add
+                </button>
+              </div>
+            </div>
+          </div>`;
+        menuContainer.appendChild(col);
+      });
+    }
+
+    // Add item to cart
+    function addToCart(category, index, event) {
+      if (event) event.stopPropagation();
+      
+      const item = foodItems[category][index];
+      const existingItem = cart.find(cartItem => cartItem.name === item.name);
+      
+      if (existingItem) {
+        existingItem.qty++;
+      } else {
+        cart.push({ 
+          ...item,
+          qty: 1 
+        });
+      }
+      
+      saveCart();
+      renderCart();
+      
+      // On mobile, show the cart panel when adding first item
+      if (window.innerWidth < 768 && cart.length === 1) {
+        toggleCartPanel();
+      }
+    }
+
+    // Update cart quantity
+    function updateCart(index, change, event) {
+      if (event) event.stopPropagation();
+      
+      cart[index].qty += change;
+      
+      if (cart[index].qty < 1) {
+        cart.splice(index, 1);
+      }
+      
+      saveCart();
+      renderCart();
+    }
+
+    // Save cart to localStorage
+    function saveCart() {
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartBadge();
+    }
+
+    // Update cart badge
+    function updateCartBadge() {
+      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+      cartBadge.textContent = totalItems;
+      cartBadge.style.display = totalItems > 0 ? 'flex' : 'none';
+    }
+
+    // Render cart
+    function renderCart() {
+      if (cart.length === 0) {
+        mobileCartList.innerHTML = '<li class="empty-cart">Your cart is empty</li>';
+        mobileTotalAmount.textContent = '0';
+        updateCartBadge();
+        return;
+      }
+      
+      mobileCartList.innerHTML = '';
+      let total = 0;
+      
+      cart.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.className = 'cart-item';
+        li.innerHTML = `
+          <img src="${item.image}" class="cart-item-img" alt="${item.name}">
+          <div class="cart-item-details">
+            <div><strong>${item.name}</strong></div>
+            <div>₹${item.price} × ${item.qty} = ₹${item.qty * item.price}</div>
+          </div>
+          <div class="cart-item-controls">
+            <button class="cart-item-btn" onclick="updateCart(${index}, -1, event)">-</button>
+            <button class="cart-item-btn" onclick="updateCart(${index}, 1, event)">+</button>
+          </div>`;
+        mobileCartList.appendChild(li);
+        total += item.qty * item.price;
+      });
+      
+      mobileTotalAmount.textContent = total;
+      updateCartBadge();
+    }
+
+    // Toggle mobile cart panel
+    function toggleCartPanel() {
+      mobileCartPanel.classList.toggle('show');
+    }
+
+    // Handle checkout
+    function handleCheckout() {
+      if (cart.length === 0) {
+        alert('Your cart is empty');
+        return;
+      }
+      
+      if (!customerName.value || !customerAddress.value || !customerPhone.value) {
+        alert('Please fill all required fields');
+        return;
+      }
+      
+      let message = `🛒 *New Food Order - Food Express*\n\n`;
+      message += `📅 ${new Date().toLocaleString()}\n\n`;
+      
+      message += `👤 *Customer Details:*\n`;
+      message += `Name: ${customerName.value}\n`;
+      message += `Phone: ${customerPhone.value}\n`;
+      message += `Address: ${customerAddress.value}\n\n`;
+      
+      message += `🍽️ *Order Items:*\n`;
+      cart.forEach(item => {
+        message += `- ${item.qty} x ${item.name} = ₹${item.qty * item.price}\n`;
+      });
+      
+      let total = cart.reduce((sum, item) => sum + item.qty * item.price, 0);
+      message += `\n💰 *Total Amount:* ₹${total}\n\n`;
+      message += `Thank you for your order!`;
+
+      const whatsappLink = `https://wa.me/918805406514?text=${encodeURIComponent(message)}`;
+      window.open(whatsappLink, '_blank');
+      
+      // Clear cart after order
+      cart = [];
+      saveCart();
+      renderCart();
+      customerName.value = '';
+      customerAddress.value = '';
+      customerPhone.value = '';
+      toggleCartPanel();
+    }
+
+    // Event Listeners
+    cartToggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      toggleCartPanel();
+    });
+
+    checkoutBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      handleCheckout();
+    });
+
+    // Category tab switching
+    categoryTabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        categoryTabs.forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        currentCategory = this.dataset.category;
+        loadMenu(currentCategory);
+      });
+    });
+
+    // Close cart panel when clicking outside
+    document.addEventListener('click', function(e) {
+      const isCartButton = e.target.closest('.cart-item-btn') || 
+                          e.target.classList.contains('cart-item-btn');
+      
+      if (mobileCartPanel.classList.contains('show') && 
+          e.target !== cartToggle && 
+          !mobileCartPanel.contains(e.target) &&
+          !isCartButton) {
+        toggleCartPanel();
+      }
+    });
+
+    // Initialize app
+    function init() {
+      loadMenu(currentCategory);
+      renderCart();
+    }
+
+    init();
+  </script>
+</body>
+</html>
