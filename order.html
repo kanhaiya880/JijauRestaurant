@@ -23,6 +23,32 @@
       padding-bottom: 80px;
     }
     
+    /* Toast notification styles */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1100;
+    }
+    
+    .toast {
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border-left: 5px solid var(--primary-color);
+    }
+    
+    .toast-body {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .toast-icon {
+      color: var(--primary-color);
+      font-size: 1.2rem;
+    }
+    
+    /* Rest of your existing styles... */
     .app-header {
       background-color: var(--primary-color);
       color: white;
@@ -125,6 +151,11 @@
       align-items: center;
       gap: 5px;
       font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    
+    .add-btn:active {
+      transform: scale(0.95);
     }
     
     .mobile-cart-panel {
@@ -285,6 +316,16 @@
     <div class="row" id="menu"></div>
   </div>
 
+  <!-- Toast Notification -->
+  <div class="toast-container">
+    <div class="toast align-items-center" id="toast-notification" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-body">
+        <i class="fas fa-check-circle toast-icon"></i>
+        <span id="toast-message">Item added to cart</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Mobile Cart Panel -->
   <div class="mobile-cart-panel" id="mobile-cart-panel">
     <div class="panel-header">
@@ -396,6 +437,8 @@
     const customerName = document.getElementById('customer-name');
     const customerAddress = document.getElementById('customer-address');
     const customerPhone = document.getElementById('customer-phone');
+    const toast = new bootstrap.Toast(document.getElementById('toast-notification'));
+    const toastMessage = document.getElementById('toast-message');
 
     // Initialize cart
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -427,6 +470,17 @@
       });
     }
 
+    // Show toast notification
+    function showToast(message) {
+      toastMessage.textContent = message;
+      toast.show();
+      
+      // Hide after 3 seconds
+      setTimeout(() => {
+        toast.hide();
+      }, 3000);
+    }
+
     // Add item to cart
     function addToCart(category, index, event) {
       if (event) event.stopPropagation();
@@ -436,11 +490,13 @@
       
       if (existingItem) {
         existingItem.qty++;
+        showToast(`${item.name} (Quantity increased to ${existingItem.qty})`);
       } else {
         cart.push({ 
           ...item,
           qty: 1 
         });
+        showToast(`${item.name} added to cart`);
       }
       
       saveCart();
@@ -459,7 +515,10 @@
       cart[index].qty += change;
       
       if (cart[index].qty < 1) {
+        showToast(`${cart[index].name} removed from cart`);
         cart.splice(index, 1);
+      } else {
+        showToast(`${cart[index].name} quantity updated to ${cart[index].qty}`);
       }
       
       saveCart();
@@ -520,12 +579,12 @@
     // Handle checkout
     function handleCheckout() {
       if (cart.length === 0) {
-        alert('Your cart is empty');
+        showToast("Your cart is empty");
         return;
       }
       
       if (!customerName.value || !customerAddress.value || !customerPhone.value) {
-        alert('Please fill all required fields');
+        showToast("Please fill all required fields");
         return;
       }
       
