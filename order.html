@@ -152,6 +152,21 @@
       pointer-events: auto;
     }
     
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: #999;
+      cursor: pointer;
+    }
+    
     .cart-item {
       display: flex;
       align-items: center;
@@ -272,7 +287,12 @@
 
   <!-- Mobile Cart Panel -->
   <div class="mobile-cart-panel" id="mobile-cart-panel">
-    <h4><i class="fas fa-shopping-cart"></i> Your Order</h4>
+    <div class="panel-header">
+      <h4><i class="fas fa-shopping-cart"></i> Your Order</h4>
+      <button class="close-btn" id="close-cart-panel">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
     <ul class="list-unstyled" id="mobile-cart-list">
       <li class="empty-cart">Your cart is empty</li>
     </ul>
@@ -370,6 +390,7 @@
     const cartBadge = document.getElementById('cart-badge');
     const cartToggle = document.getElementById('cart-toggle');
     const mobileCartPanel = document.getElementById('mobile-cart-panel');
+    const closeCartPanel = document.getElementById('close-cart-panel');
     const categoryTabs = document.querySelectorAll('.category-tab');
     const checkoutBtn = document.getElementById('checkout-btn');
     const customerName = document.getElementById('customer-name');
@@ -540,6 +561,11 @@
 
     // Event Listeners
     cartToggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      toggleCartPanel();
+    });
+
+    closeCartPanel.addEventListener('click', function(e) {
       e.stopPropagation();
       toggleCartPanel();
     });
