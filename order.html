@@ -23,7 +23,6 @@
       padding-bottom: 80px;
     }
     
-    /* Toast notification styles */
     .toast-container {
       position: fixed;
       top: 20px;
@@ -48,7 +47,6 @@
       font-size: 1.2rem;
     }
     
-    /* Rest of your existing styles... */
     .app-header {
       background-color: var(--primary-color);
       color: white;
@@ -72,7 +70,7 @@
       background: white;
       padding: 10px 0;
       position: sticky;
-      top: 68px;
+      top: 58px;
       z-index: 999;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
@@ -307,7 +305,8 @@
   </header>
 
   <div class="category-tabs">
-    <div class="category-tab active" data-category="breakfast">Breakfast</div>
+    <div class="category-tab active" data-category="all">All</div>
+    <div class="category-tab" data-category="breakfast">Breakfast</div>
     <div class="category-tab" data-category="lunch">Lunch</div>
     <div class="category-tab" data-category="dinner">Dinner</div>
   </div>
@@ -362,6 +361,7 @@
   <script>
     // Food data categorized by meal time
     const foodItems = {
+      all: [], // This will be populated with all items
       breakfast: [
         { 
           name: 'Masala Dosa', 
@@ -442,12 +442,14 @@
 
     // Initialize cart
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    let currentCategory = 'breakfast';
+    let currentCategory = 'all';
 
     // Load menu items for a category
     function loadMenu(category) {
       menuContainer.innerHTML = '';
-      foodItems[category].forEach((item, index) => {
+      const itemsToShow = category === 'all' ? foodItems.all : foodItems[category];
+      
+      itemsToShow.forEach((item, index) => {
         const col = document.createElement('div');
         col.className = 'col-12';
         col.innerHTML = `
@@ -485,7 +487,8 @@
     function addToCart(category, index, event) {
       if (event) event.stopPropagation();
       
-      const item = foodItems[category][index];
+      // Get the correct item based on category
+      const item = category === 'all' ? foodItems.all[index] : foodItems[category][index];
       const existingItem = cart.find(cartItem => cartItem.name === item.name);
       
       if (existingItem) {
@@ -591,19 +594,20 @@
       let message = `🛒 *New Food Order - Food Express*\n\n`;
       message += `📅 ${new Date().toLocaleString()}\n\n`;
       
-      message += `👤 *Customer Details:*\n`;
-      message += `Name: ${customerName.value}\n`;
-      message += `Phone: ${customerPhone.value}\n`;
-      message += `Address: ${customerAddress.value}\n\n`;
+      message += `👤 *Customer Details:*\n\n`;
+      message += `*Name:* ${customerName.value}\n`;
+      message += `*Phone:* ${customerPhone.value}\n`;
+      message += `*Address:* ${customerAddress.value}\n\n`;
       
-      message += `🍽️ *Order Items:*\n`;
-      cart.forEach(item => {
-        message += `- ${item.qty} x ${item.name} = ₹${item.qty * item.price}\n`;
+      message += `🍽️ *Order Items:*\n\n`;
+      let item_index=0
+      cart.forEach(item => { 
+        message += `(${item_index+=1}). ${item.qty} x ${item.name} = ₹${item.qty * item.price}\n`;
       });
       
       let total = cart.reduce((sum, item) => sum + item.qty * item.price, 0);
       message += `\n💰 *Total Amount:* ₹${total}\n\n`;
-      message += `Thank you for your order!`;
+      message += `*( 🟢 NOTE: Please share you payment screenshot and location food will be on door step within 30 min )*`;
 
       const whatsappLink = `https://wa.me/918805406514?text=${encodeURIComponent(message)}`;
       window.open(whatsappLink, '_blank');
@@ -659,6 +663,9 @@
 
     // Initialize app
     function init() {
+      // Combine all food items into the 'all' category
+      foodItems.all = [...foodItems.breakfast, ...foodItems.lunch, ...foodItems.dinner];
+      
       loadMenu(currentCategory);
       renderCart();
     }
